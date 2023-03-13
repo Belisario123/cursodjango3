@@ -1,0 +1,35 @@
+upstream django {
+    server unix:///home/edubelinicolau85/cursodjango3/blog/mysite.sock; 
+}
+
+server {
+    listen      8000;
+    server_name maniadetrilhamacae.com.br;
+    charset     utf-8;
+
+    client_max_body_size 75M; 
+
+    location /media  {
+        alias /home/edubelinicolau85/cursodjango3/blog/media; 
+    }
+
+    location /static {
+        alias /home/edubelinicolau85/cursodjango3/blog/static;
+    }
+
+    location / {
+        uwsgi_pass  django;
+        include     /home/edubelinicolau85/cursodjango3/blog/uwsgi_params; 
+    }
+}
+
+
+[uwsgi]
+chdir           = /home/edubelinicolau85/cursodjango3/blog
+module          = django_vps.wsgi
+home            = /home/ubuntu/venv
+master          = true
+processes       = 10
+socket          = /home/ubuntu/django-apache-nginx-uwsgi-vps-ubuntu/mysite.sock
+vacuum          = true
+chmod-socket    = 666
